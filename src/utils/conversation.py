@@ -62,10 +62,10 @@ def show_chat(ai_content: str, user_text: str) -> None:
             """, help=f"{st.session_state.locale.total_cost}{sum(st.session_state.costs):.5f}$")
 
 
-def calc_cost(usage: dict) -> None:
-    total_tokens = usage.get("total_tokens")
-    prompt_tokens = usage.get("prompt_tokens")
-    completion_tokens = usage.get("completion_tokens")
+def calc_cost(usage) -> None:
+    total_tokens = usage.total_tokens
+    prompt_tokens = usage.prompt_tokens
+    completion_tokens = usage.completion_tokens
     st.session_state.total_tokens.append(total_tokens)
     # pricing logic: https://openai.com/pricing#language-models
     if st.session_state.model == "gpt-3.5-turbo":
@@ -78,21 +78,15 @@ def calc_cost(usage: dict) -> None:
 def show_gpt_conversation() -> None:
     try:
         completion = create_gpt_completion(st.session_state.model, st.session_state.messages)
-        ai_content = completion.get("choices")[0].get("message").get("content")
-        calc_cost(completion.get("usage"))
+        ai_content = completion.choices[0].message.content
+        calc_cost(completion.usage)
         st.session_state.messages.append({"role": "assistant", "content": ai_content})
         if ai_content:
             show_chat(ai_content, st.session_state.user_text)
             st.divider()
             show_audio_player(ai_content)
-    except OpenAIError as err:
-        if err.code == "context_length_exceeded":
-            st.session_state.messages.pop(1)
-            if len(st.session_state.messages) == 1:
-                st.session_state.user_text = ""
-            show_conversation()
-        else:
-            st.error(err)
+    except Exception as err:
+        st.error(err)
     except UnboundLocalError as err:
         st.error(err)
 
