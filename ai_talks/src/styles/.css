@@ -22,15 +22,15 @@ hr {
 }
 
 #MainMenu {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 footer {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 header {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 audio::-webkit-media-controls-panel,

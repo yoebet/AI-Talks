@@ -1,5 +1,8 @@
-[server]
-enableStaticServing = true
+#[server]
+#enableStaticServing = true
+
+[client]
+toolbarMode = "auto"
 
 [theme]
 primaryColor = "#0E8388"
